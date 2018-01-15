@@ -1,6 +1,6 @@
-# YostLad IMU driver
+# Yostlab IMU driver
 
-Yost IMU Driver for ROS see: https://yostlabs.com/3-space-sensors/
+Yostlab IMU Driver for ROS see: https://yostlabs.com/3-space-sensors/
 
 ## How to run
 There is a launch file to run driver node
