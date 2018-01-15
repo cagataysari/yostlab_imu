@@ -154,31 +154,6 @@ void YostLabDriver::run()
               ss.ignore();
       }
 
-      if(line_num_ == 1)
-      {
-          ROS_DEBUG("%s Quat:  x: %lf , y: %lf, z: %lf, w: %lf", this->logger.c_str(),
-                                                               parsed_val_[0],
-                                                               parsed_val_[1],
-                                                               parsed_val_[2],
-                                                               parsed_val_[3]);
-      } else if( line_num_ == 2 ) {
-
-        ROS_DEBUG("%s Gyro Rate: x: %lf , y: %lf, z: %lf ", this->logger.c_str(),
-                                                             parsed_val_[4],
-                                                             parsed_val_[5],
-                                                             parsed_val_[6]);
-
-      } else if (line_num_ == 3) {
-
-        ROS_DEBUG("%s Linear Acceleration: x: %lf , y: %lf, z: %lf ", this->logger.c_str(),
-                                                                     parsed_val_[7],
-                                                                     parsed_val_[8],
-                                                                     parsed_val_[9]);
-
-
-      }
-
-
       if(line_num_ == 3)
       {
          line_num_ = 0;
