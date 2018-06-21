@@ -28,48 +28,48 @@ const std::string YostLabDriver::getSoftwareVersion()
   return buf;
 }
 
-std::string YostLabDriver::getEulerDecomp()
+const std::string YostLabDriver::getEulerDecomp()
 {
   this->SerialWriteString(GET_EULER_DECOMPOSTION_ORDER);
   const std::string buf = this->SerialReadLine();
   std::string ret_buf;
   if(buf == "0\r\n")
-        ret_buf = "XYZ";
+    ret_buf = "XYZ";
   else if ( buf == "1\r\n")
-        ret_buf = "YZX";
+    ret_buf = "YZX";
   else if ( buf == "2\r\n")
-        ret_buf = "ZXY";
+    ret_buf = "ZXY";
   else if (buf == "3\r\n")
-        ret_buf = "ZYX";
+    ret_buf = "ZYX";
   else if( buf == "4\r\n")
-        ret_buf = "XZY";
+    ret_buf = "XZY";
   else if( buf == "5\r\n")
-        ret_buf = "YXZ";
+    ret_buf = "YXZ";
   else
-       ret_buf = "Unknown";
+    ret_buf = "Unknown";
   ROS_INFO_STREAM(this->logger << "Euler Decomposition: " << ret_buf << ", buf is: " << buf);
   return ret_buf;
 }
 
-std::string YostLabDriver::getAxisDirection()
+const std::string YostLabDriver::getAxisDirection()
 {
   this->SerialWriteString(GET_AXIS_DIRECTION);
   const std::string buf = this->SerialReadLine();
   std::string ret_buf;
   if(buf == "0\r\n")
-        ret_buf = "X: Right, Y: Up, Z: Forward";
+    ret_buf = "X: Right, Y: Up, Z: Forward";
   else if ( buf == "1\r\n")
-        ret_buf = "X: Right, Y: Forward, Z: Up";
+    ret_buf = "X: Right, Y: Forward, Z: Up";
   else if ( buf == "2\r\n")
-        ret_buf = "X: Up, Y: Right, Z: Forward";
+    ret_buf = "X: Up, Y: Right, Z: Forward";
   else if (buf == "3\r\n")
-        ret_buf = "X: Forward, Y: Right, Z: Up";
+    ret_buf = "X: Forward, Y: Right, Z: Up";
   else if( buf == "4\r\n")
-        ret_buf = "X: Up, Y: Forward, Z: Right";
+    ret_buf = "X: Up, Y: Forward, Z: Right";
   else if( buf == "5\r\n")
-        ret_buf = "X: Forward, Y: Up, Z: Right";
+    ret_buf = "X: Forward, Y: Up, Z: Right";
   else
-       ret_buf = "Unknown";
+    ret_buf = "Unknown";
   ROS_INFO_STREAM(this->logger << "Axis Direction: " << ret_buf << ", buf is: " << buf);
   return ret_buf;
 }
@@ -83,38 +83,38 @@ void YostLabDriver::startGyroCalibration(void)
 
 void YostLabDriver::setMIMode(bool on)
 {
-    if(on)
-      this->SerialWriteString(SET_MI_MODE_ENABLED);
-    else
-      this->SerialWriteString(SET_MI_MODE_DISABLED);
+  if(on)
+    this->SerialWriteString(SET_MI_MODE_ENABLED);
+  else
+    this->SerialWriteString(SET_MI_MODE_DISABLED);
 }
 
-std::string YostLabDriver::getCalibMode()
+const std::string YostLabDriver::getCalibMode()
 {
   this->SerialWriteString(GET_CALIB_MODE);
   const std::string buf = this->SerialReadLine();
   std::string ret_buf;
   if(buf == "0\r\n")
-        ret_buf = "Bias";
+    ret_buf = "Bias";
   else if ( buf == "1\r\n")
-        ret_buf = "Scale and Bias";
+    ret_buf = "Scale and Bias";
   else
-       ret_buf = "Unknown";
+    ret_buf = "Unknown";
   ROS_INFO_STREAM(this->logger << "Calibration Mode: " << ret_buf << ", buf is: " << buf);
   return ret_buf;
 }
 
-std::string YostLabDriver::getMIMode()
+const std::string YostLabDriver::getMIMode()
 {
   this->SerialWriteString(GET_MI_MODE_ENABLED);
   const std::string buf = this->SerialReadLine();
   std::string ret_buf;
   if(buf == "0\r\n")
-        ret_buf = "Disabled";
+    ret_buf = "Disabled";
   else if ( buf == "1\r\n")
-        ret_buf = "Enabled";
+    ret_buf = "Enabled";
   else
-       ret_buf = "Unknown";
+    ret_buf = "Unknown";
   ROS_INFO_STREAM(this->logger << "MI Mode: " << ret_buf << ", buf is: " << buf);
   return ret_buf;
 }
@@ -149,38 +149,38 @@ void YostLabDriver::run()
       double i;
       while (ss >> i)
       {
-          parsed_val_.push_back(i);
-          if (ss.peek() == ',')
-              ss.ignore();
+        parsed_val_.push_back(i);
+        if (ss.peek() == ',')
+          ss.ignore();
       }
 
       if(line_num_ == 3)
       {
-         line_num_ = 0;
-         imu_msg_.header.stamp    = ros::Time::now();
-         imu_msg_.header.frame_id = "imu_link";
-         imu_msg_.orientation.x = parsed_val_[0];
-         imu_msg_.orientation.y = parsed_val_[1];
-         imu_msg_.orientation.z = parsed_val_[2];
-         imu_msg_.orientation.w = parsed_val_[3];
-         imu_msg_.angular_velocity.x = parsed_val_[4];
-         imu_msg_.angular_velocity.y = parsed_val_[5];
-         imu_msg_.angular_velocity.z = parsed_val_[6];
-         imu_msg_.linear_acceleration.x = parsed_val_[7];
-         imu_msg_.linear_acceleration.y = parsed_val_[8];
-         imu_msg_.linear_acceleration.z = parsed_val_[9];
-         parsed_val_.clear();
-         this->imu_pub_.publish(imu_msg_);
-         tf::Quaternion q( imu_msg_.orientation.x,
-                           imu_msg_.orientation.y,
-                           imu_msg_.orientation.z,
-                           imu_msg_.orientation.w);
-         tf::Matrix3x3 m(q);
-         double roll, pitch, yaw;
-         m.getRPY(roll, pitch, yaw);
-         ROS_INFO_THROTTLE(1.0, "[ YostLabImuDriver ] roll: %f, pitch: %f, yaw: %f ", roll,pitch,yaw);
+        line_num_ = 0;
+        imu_msg_.header.stamp    = ros::Time::now();
+        imu_msg_.header.frame_id = "imu_link";
+        imu_msg_.orientation.x = parsed_val_[0];
+        imu_msg_.orientation.y = parsed_val_[1];
+        imu_msg_.orientation.z = parsed_val_[2];
+        imu_msg_.orientation.w = parsed_val_[3];
+        imu_msg_.angular_velocity.x = parsed_val_[4];
+        imu_msg_.angular_velocity.y = parsed_val_[5];
+        imu_msg_.angular_velocity.z = parsed_val_[6];
+        imu_msg_.linear_acceleration.x = parsed_val_[7];
+        imu_msg_.linear_acceleration.y = parsed_val_[8];
+        imu_msg_.linear_acceleration.z = parsed_val_[9];
+        parsed_val_.clear();
+        this->imu_pub_.publish(imu_msg_);
+        tf::Quaternion q( imu_msg_.orientation.x,
+                          imu_msg_.orientation.y,
+                          imu_msg_.orientation.z,
+                          imu_msg_.orientation.w);
+        tf::Matrix3x3 m(q);
+        double roll, pitch, yaw;
+        m.getRPY(roll, pitch, yaw);
+        ROS_INFO_THROTTLE(1.0, "[ YostLabImuDriver ] roll: %f, pitch: %f, yaw: %f ", roll,pitch,yaw);
       }
-     
+
     }
     loop_rate.sleep();
     ros::spinOnce();
