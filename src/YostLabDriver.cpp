@@ -32,21 +32,23 @@ const std::string YostLabDriver::getEulerDecomp()
 {
   this->SerialWriteString(GET_EULER_DECOMPOSTION_ORDER);
   const std::string buf = this->SerialReadLine();
-  std::string ret_buf;
+  const std::string ret_buf = [&]()
+  {
   if(buf == "0\r\n")
-    ret_buf = "XYZ";
+    return "XYZ";
   else if ( buf == "1\r\n")
-    ret_buf = "YZX";
+    return "YZX";
   else if ( buf == "2\r\n")
-    ret_buf = "ZXY";
+    return "ZXY";
   else if (buf == "3\r\n")
-    ret_buf = "ZYX";
+    return "ZYX";
   else if( buf == "4\r\n")
-    ret_buf = "XZY";
+    return "XZY";
   else if( buf == "5\r\n")
-    ret_buf = "YXZ";
+    return "YXZ";
   else
-    ret_buf = "Unknown";
+    return "Unknown";
+  }();
   ROS_INFO_STREAM(this->logger << "Euler Decomposition: " << ret_buf << ", buf is: " << buf);
   return ret_buf;
 }
@@ -55,21 +57,23 @@ const std::string YostLabDriver::getAxisDirection()
 {
   this->SerialWriteString(GET_AXIS_DIRECTION);
   const std::string buf = this->SerialReadLine();
-  std::string ret_buf;
+  const std::string ret_buf = [&]()
+  {
   if(buf == "0\r\n")
-    ret_buf = "X: Right, Y: Up, Z: Forward";
+    return "X: Right, Y: Up, Z: Forward";
   else if ( buf == "1\r\n")
-    ret_buf = "X: Right, Y: Forward, Z: Up";
+    return "X: Right, Y: Forward, Z: Up";
   else if ( buf == "2\r\n")
-    ret_buf = "X: Up, Y: Right, Z: Forward";
+    return "X: Up, Y: Right, Z: Forward";
   else if (buf == "3\r\n")
-    ret_buf = "X: Forward, Y: Right, Z: Up";
+    return "X: Forward, Y: Right, Z: Up";
   else if( buf == "4\r\n")
-    ret_buf = "X: Up, Y: Forward, Z: Right";
+    return "X: Up, Y: Forward, Z: Right";
   else if( buf == "5\r\n")
-    ret_buf = "X: Forward, Y: Up, Z: Right";
+    return "X: Forward, Y: Up, Z: Right";
   else
-    ret_buf = "Unknown";
+    return "Unknown";
+  }();
   ROS_INFO_STREAM(this->logger << "Axis Direction: " << ret_buf << ", buf is: " << buf);
   return ret_buf;
 }
@@ -93,13 +97,15 @@ const std::string YostLabDriver::getCalibMode()
 {
   this->SerialWriteString(GET_CALIB_MODE);
   const std::string buf = this->SerialReadLine();
-  std::string ret_buf;
+  const std::string ret_buf = [&]()
+  {
   if(buf == "0\r\n")
-    ret_buf = "Bias";
+    return "Bias";
   else if ( buf == "1\r\n")
-    ret_buf = "Scale and Bias";
+    return "Scale and Bias";
   else
-    ret_buf = "Unknown";
+    return "Unknown";
+  }();
   ROS_INFO_STREAM(this->logger << "Calibration Mode: " << ret_buf << ", buf is: " << buf);
   return ret_buf;
 }
@@ -108,13 +114,15 @@ const std::string YostLabDriver::getMIMode()
 {
   this->SerialWriteString(GET_MI_MODE_ENABLED);
   const std::string buf = this->SerialReadLine();
-  std::string ret_buf;
+  const std::string ret_buf = [&]()
+  {
   if(buf == "0\r\n")
-    ret_buf = "Disabled";
+    return "Disabled";
   else if ( buf == "1\r\n")
-    ret_buf = "Enabled";
+    return "Enabled";
   else
-    ret_buf = "Unknown";
+    return "Unknown";
+  }();
   ROS_INFO_STREAM(this->logger << "MI Mode: " << ret_buf << ", buf is: " << buf);
   return ret_buf;
 }
